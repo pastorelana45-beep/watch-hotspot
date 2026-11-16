@@ -23,41 +23,59 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Crea file di progetto minimi
+      - name: Configura progetto Android minimale
         run: |
           mkdir -p app/src/main
-          if [ ! -f "settings.gradle" ] && [ ! -f "settings.gradle.kts" ]; then
-            echo "include ':app'" > settings.gradle
-          fi
-          if [ ! -f "build.gradle" ] && [ ! -f "build.gradle.kts" ]; then
-            echo "plugins { id 'com.android.application' version '8.1.0' apply false }" > build.gradle
-          fi
-          if [ ! -f "app/build.gradle" ] && [ ! -f "app/build.gradle.kts" ]; then
-            cat << 'EOF' > app/build.gradle
-            plugins {
-                id 'com.android.application'
-            }
-            android {
-                namespace 'com.watchhotspot'
-                compileSdk 34
-                defaultConfig {
-                    applicationId "com.watchhotspot"
-                    minSdk 30
-                    targetSdk 34
-                    versionCode 1
-                    versionName "1.0"
-                }
-            }
-            EOF
+          echo "include ':app'" > settings.gradle
+          echo "plugins { id 'com.android.application' version '8.1.0' apply false }" > build.gradle
+          cat << 'EOF' > app/build.gradle
+          plugins {
+              id 'com.android.application'
           }
+          android {
+              namespace 'com.watchhotspot'
+              compileSdk 34
+              defaultConfig {
+                  applicationId "com.watchhotspot"
+                  minSdk 30
+                  targetSdk 34
+                  versionCode 1
+                  versionName "1.0"
+              }
+          }
+          EOF
+          cat << 'EOF' > app/src/main/AndroidManifest.xml
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+              package="com.watchhotspot">
+              <uses-feature android:name="android.hardware.type.watch" />
+              <application android:label="Watch Hotspot">
+                  <activity android:name=".MainActivity" android:exported="true">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>
+          EOF
+          mkdir -p app/src/main/java/com/watchhotspot
+          cat << 'EOF' > app/src/main/java/com/watchhotspot/MainActivity.java
+          package com.watchhotspot;
+          import android.app.Activity;
+          import android.os.Bundle;
+          public class MainActivity extends Activity {
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+              }
+          }
+          EOF
+          gradle wrapper
 
-      - name: Genera APK Debug
+      - name: Compila APK con Gradle
         run: |
-          # Se non esiste gradle wrapper, usiamo un fallback o compiliamo via SDK se disponibile
-          echo "Struttura preparata per la build Android."
-          mkdir -p app/build/outputs/apk/debug/
-          # Creiamo un file segnaposto per testare l'artifact se gradle non è ancora configurato localmente
-          touch app/build/outputs/apk/debug/app-debug.apk
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
