@@ -34,7 +34,8 @@ jobs:
         uses: android-actions/setup-android@v4
 
       - name: Install Android SDK
-        run: sdkmanager "platforms;android-37" "build-tools;36.0.0"
+        run: |
+          sdkmanager "platforms;android-37.0" "build-tools;37.0.0"
 
       - name: Build APK
         run: gradle --no-daemon :app:assembleDebug
@@ -45,3 +46,4 @@ jobs:
           name: Watch-Hotspot-APK
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
+          retention-days: 14
