@@ -11,20 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download project
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Verify Project Structure
+      - name: Verify files
         run: |
-          echo "--- STRUTTURA PROGETTO ---"
+          echo "Verifica file presenti nella repository:"
           ls -la
-          find . -maxdepth 3
