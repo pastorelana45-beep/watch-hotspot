@@ -31,4 +31,3 @@ cat > app/src/main/AndroidManifest.xml <<'EOF'
 
     </application>
 </manifest>
-EOF
