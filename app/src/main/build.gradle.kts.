@@ -1,0 +1,17 @@
+
+plugins {
+    id("com.android.application")
+}
+
+android {
+    namespace = "com.watchhotspot"
+    compileSdk = 37
+
+    defaultConfig {
+        applicationId = "com.watchhotspot"
+        minSdk = 30
+        targetSdk = 36
+        versionCode = 1
+        versionName = "1.0"
+    }
+}
