@@ -6,10 +6,17 @@
         android:name="android.hardware.type.watch"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="false"
         android:label="Watch Hotspot"
         android:supportsRtl="true">
+
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
 
         <activity
             android:name=".MainActivity"
@@ -21,6 +28,7 @@
             </intent-filter>
 
         </activity>
+
     </application>
 
 </manifest>
